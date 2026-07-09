@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import './PlayerProfile.css';
 
 // API CONFIG
-const API_KEY = "RB6XKAKaHDQniZB8mLcR4jP30+NeVZw/YCEZcBKeSpKIYuZmBNhswNNkBHLvNxf1";
+// Set VITE_CFBD_API_KEY in a local .env file (see .env.example).
+const API_KEY = import.meta.env.VITE_CFBD_API_KEY;
 const HEADERS = { "Authorization": `Bearer ${API_KEY}` };
 const YEAR = 2025; // Target Year for 2026 Draft Class
 
