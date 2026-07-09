@@ -7,24 +7,29 @@ A college football dynasty/rookie draft scouting dashboard. It has two parts:
   database with a per-player profile view.
 - **`data-engine/`** — Python scripts that pull data from the
   [CollegeFootballData API](https://collegefootballdata.com/) and generate
-  the data the frontend consumes, plus a small FastAPI service backed by
-  PostgreSQL for defensive matchup intel.
+  the data the frontend consumes, plus a FastAPI service backed by
+  PostgreSQL for defensive matchup intel and player advanced stats.
 
 ## How the pieces connect
 
 ```
 data-engine/fetch_directory.py  ─┐
 data-engine/fetch_details.py    ─┴─► frontend/src/prospects.json ─► frontend (Players / Player Profile)
-data-engine/matchup_data3.py    ────► PostgreSQL (defensive_intel) ─► data-engine/main.py (FastAPI) ─► frontend (Defensive Rankings)
+data-engine/matchup_data3.py    ────► PostgreSQL (defensive_intel) ─► GET /defenses ─► frontend (Defensive Rankings)
+CollegeFootballData API (server-side only) ─► GET /players/advanced ─► frontend (Player Profile advanced stats)
 ```
 
-The Defensive Rankings page has no hardcoded havoc/sacks/turnover numbers.
+**Defensive Rankings** has no hardcoded havoc/sacks/turnover numbers.
 `RankingsDashboard.jsx` fetches `GET /defenses` on load and merges the live
 numbers onto the frontend's static team metadata (name, brand color,
 conference grouping) by team name — see
 `frontend/src/utils/mergeDefenseStats.js`. If the API is unreachable, the
-page still renders every team (colors, names, conference groups) with `-`
-in place of the missing stats instead of breaking.
+page still renders every team with `-` in place of missing stats.
+
+**Player Profile advanced stats** (red-zone usage + betting context) are
+computed in FastAPI (`GET /players/advanced`). The browser never talks to
+CollegeFootballData and never holds a CFBD API key — only the backend does
+(`CFBD_API_KEY` in `data-engine/.env`).
 
 `frontend/src/prospects.json` is the one generated data file that's checked
 into the repo, since the frontend reads it directly at build/run time.
@@ -71,7 +76,7 @@ cd data-engine
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
-cp .env.example .env    # add your CollegeFootballData API key + DB credentials
+cp .env.example .env    # add CFBD_API_KEY + DB credentials
 
 python3 fetch_directory.py    # builds frontend/src/prospects.json
 python3 fetch_details.py      # enriches it with game logs, etc.
@@ -84,31 +89,34 @@ Re-run `matchup_data3.py` periodically (e.g. weekly during the season) to
 refresh the defensive stats — `main.py` just reads whatever is currently in
 the table.
 
+`CFBD_API_KEY` is required for scripts that call CollegeFootballData and for
+`GET /players/advanced`. `GET /defenses` only needs Postgres.
+
 ### 3. Frontend
 
 ```bash
 cd frontend
 npm install
-cp .env.example .env   # add your CollegeFootballData API key + API base URL
+cp .env.example .env   # set VITE_API_BASE_URL if the API isn't on localhost:8000
 npm run dev
 ```
 
-The player profile view calls the CollegeFootballData API directly from the
-browser using `VITE_CFBD_API_KEY`. Defensive Rankings calls the FastAPI
-backend at `VITE_API_BASE_URL` (defaults to `http://localhost:8000`).
+The frontend only needs `VITE_API_BASE_URL` (defaults to `http://localhost:8000`).
+Do **not** put a CFBD key in any `VITE_*` variable — those are baked into the
+browser bundle.
 
 Get a free CollegeFootballData API key at
-https://collegefootballdata.com/key.
+https://collegefootballdata.com/key and put it in `data-engine/.env` only
+(or as a Cursor/cloud environment secret named `CFBD_API_KEY`).
 
-### Running the merge-logic tests
-
-The join between live `/defenses` API data and the frontend's static team
-metadata (`frontend/src/utils/mergeDefenseStats.js`) has a small
-dependency-free test suite:
+### Running tests
 
 ```bash
-cd frontend
-npm test
+# Frontend merge-logic tests
+cd frontend && npm test
+
+# Backend advanced-stats unit tests (mocked CFBD)
+cd data-engine && python3 -m unittest test_advanced_stats.py
 ```
 
 ## Notes

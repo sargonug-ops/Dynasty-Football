@@ -35,4 +35,18 @@ export function fetchDefenses() {
   return apiGet('/defenses');
 }
 
+/**
+ * Fetches the server-side advanced scouting report (red zone + betting
+ * context) for one player. The FastAPI backend proxies CollegeFootballData
+ * so the API key never reaches the browser.
+ *
+ * @param {{ name: string, school: string, position?: string, year?: number }} params
+ */
+export function fetchPlayerAdvancedStats({ name, school, position = '', year } = {}) {
+  const qs = new URLSearchParams({ name, school });
+  if (position) qs.set('position', position);
+  if (year != null) qs.set('year', String(year));
+  return apiGet(`/players/advanced?${qs.toString()}`);
+}
+
 export { ApiError, API_BASE_URL };
