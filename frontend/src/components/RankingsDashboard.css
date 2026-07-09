@@ -69,13 +69,17 @@
 }
 
 /* 4. SCROLL WRAPPER (Handles the horizontal scroll for tables) */
-.table-container {
+/* Scoped to .conference-card so this doesn't collide with the (globally
+   defined) .table-container in PlayersDashboard.css, which sets
+   overflow: hidden and would otherwise kill vertical scrolling here. */
+.conference-card .table-container {
   width: 100%;
   overflow-x: auto; /* Enables horizontal scroll */
   overflow-y: auto; /* Enables vertical scroll for long lists */
   -webkit-overflow-scrolling: touch; 
   padding-bottom: 5px;
   flex-grow: 1; /* Fills the rest of the card height */
+  min-height: 0; /* Critical flexbox fix: lets the scroll area shrink below content height */
 }
 
 /* 5. TEAM ROWS */

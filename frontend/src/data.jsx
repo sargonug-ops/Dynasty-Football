@@ -229,6 +229,73 @@ export const FIRST_ROUND_ORDER = [
   { pick: 18, team: "Minnesota Vikings", needs: "CB/DT" }
 ];
  
+// --- TOP 25 PPR FANTASY ROOKIE RANKINGS (2025 class, 1QB PPR consensus) ---
+// Order reflects fantasy value, not NFL draft slot. `team` is the NFL landing spot.
+export const FANTASY_ROOKIE_PPR_TOP25 = [
+  { rank: 1, name: "Ashton Jeanty", pos: "RB", team: "LV" },
+  { rank: 2, name: "Omarion Hampton", pos: "RB", team: "LAC" },
+  { rank: 3, name: "Travis Hunter", pos: "WR", team: "JAX" },
+  { rank: 4, name: "Tetairoa McMillan", pos: "WR", team: "CAR" },
+  { rank: 5, name: "TreVeyon Henderson", pos: "RB", team: "NE" },
+  { rank: 6, name: "Quinshon Judkins", pos: "RB", team: "CLE" },
+  { rank: 7, name: "Emeka Egbuka", pos: "WR", team: "TB" },
+  { rank: 8, name: "Tyler Warren", pos: "TE", team: "IND" },
+  { rank: 9, name: "Kaleb Johnson", pos: "RB", team: "PIT" },
+  { rank: 10, name: "Colston Loveland", pos: "TE", team: "CHI" },
+  { rank: 11, name: "RJ Harvey", pos: "RB", team: "DEN" },
+  { rank: 12, name: "Matthew Golden", pos: "WR", team: "GB" },
+  { rank: 13, name: "Luther Burden III", pos: "WR", team: "CHI" },
+  { rank: 14, name: "Cam Ward", pos: "QB", team: "TEN" },
+  { rank: 15, name: "Tre Harris", pos: "WR", team: "LAC" },
+  { rank: 16, name: "Jayden Higgins", pos: "WR", team: "HOU" },
+  { rank: 17, name: "Cam Skattebo", pos: "RB", team: "NYG" },
+  { rank: 18, name: "Jack Bech", pos: "WR", team: "LV" },
+  { rank: 19, name: "Jalen Milroe", pos: "QB", team: "SEA" },
+  { rank: 20, name: "Jaxson Dart", pos: "QB", team: "NYG" },
+  { rank: 21, name: "Tyler Shough", pos: "QB", team: "NO" },
+  { rank: 22, name: "Kyle Williams", pos: "WR", team: "NE" },
+  { rank: 23, name: "Jaylin Noel", pos: "WR", team: "HOU" },
+  { rank: 24, name: "Bhayshul Tuten", pos: "RB", team: "JAX" },
+  { rank: 25, name: "Dylan Sampson", pos: "RB", team: "CLE" },
+];
+
+// --- 2025 NFL DRAFT: ROUND 1 (actual results, in selection order) ---
+// Players listed in the order they were selected (pick 1 -> 32).
+export const DRAFT_2025_ROUND_1 = [
+  { pick: 1, team: "Tennessee Titans", name: "Cam Ward", pos: "QB", school: "Miami" },
+  { pick: 2, team: "Jacksonville Jaguars", name: "Travis Hunter", pos: "WR/CB", school: "Colorado" },
+  { pick: 3, team: "New York Giants", name: "Abdul Carter", pos: "EDGE", school: "Penn State" },
+  { pick: 4, team: "New England Patriots", name: "Will Campbell", pos: "OT", school: "LSU" },
+  { pick: 5, team: "Cleveland Browns", name: "Mason Graham", pos: "DT", school: "Michigan" },
+  { pick: 6, team: "Las Vegas Raiders", name: "Ashton Jeanty", pos: "RB", school: "Boise State" },
+  { pick: 7, team: "New York Jets", name: "Armand Membou", pos: "OT", school: "Missouri" },
+  { pick: 8, team: "Carolina Panthers", name: "Tetairoa McMillan", pos: "WR", school: "Arizona" },
+  { pick: 9, team: "New Orleans Saints", name: "Kelvin Banks Jr.", pos: "OT", school: "Texas" },
+  { pick: 10, team: "Chicago Bears", name: "Colston Loveland", pos: "TE", school: "Michigan" },
+  { pick: 11, team: "San Francisco 49ers", name: "Mykel Williams", pos: "EDGE", school: "Georgia" },
+  { pick: 12, team: "Dallas Cowboys", name: "Tyler Booker", pos: "G", school: "Alabama" },
+  { pick: 13, team: "Miami Dolphins", name: "Kenneth Grant", pos: "DT", school: "Michigan" },
+  { pick: 14, team: "Indianapolis Colts", name: "Tyler Warren", pos: "TE", school: "Penn State" },
+  { pick: 15, team: "Atlanta Falcons", name: "Jalon Walker", pos: "LB", school: "Georgia" },
+  { pick: 16, team: "Arizona Cardinals", name: "Walter Nolen", pos: "DT", school: "Ole Miss" },
+  { pick: 17, team: "Cincinnati Bengals", name: "Shemar Stewart", pos: "EDGE", school: "Texas A&M" },
+  { pick: 18, team: "Seattle Seahawks", name: "Grey Zabel", pos: "G", school: "North Dakota State" },
+  { pick: 19, team: "Tampa Bay Buccaneers", name: "Emeka Egbuka", pos: "WR", school: "Ohio State" },
+  { pick: 20, team: "Denver Broncos", name: "Jahdae Barron", pos: "CB", school: "Texas" },
+  { pick: 21, team: "Pittsburgh Steelers", name: "Derrick Harmon", pos: "DT", school: "Oregon" },
+  { pick: 22, team: "Los Angeles Chargers", name: "Omarion Hampton", pos: "RB", school: "North Carolina" },
+  { pick: 23, team: "Green Bay Packers", name: "Matthew Golden", pos: "WR", school: "Texas" },
+  { pick: 24, team: "Minnesota Vikings", name: "Donovan Jackson", pos: "G", school: "Ohio State" },
+  { pick: 25, team: "New York Giants", name: "Jaxson Dart", pos: "QB", school: "Ole Miss" },
+  { pick: 26, team: "Atlanta Falcons", name: "James Pearce Jr.", pos: "EDGE", school: "Tennessee" },
+  { pick: 27, team: "Baltimore Ravens", name: "Malaki Starks", pos: "S", school: "Georgia" },
+  { pick: 28, team: "Detroit Lions", name: "Tyleik Williams", pos: "DT", school: "Ohio State" },
+  { pick: 29, team: "Washington Commanders", name: "Josh Conerly Jr.", pos: "OT", school: "Oregon" },
+  { pick: 30, team: "Buffalo Bills", name: "Maxwell Hairston", pos: "CB", school: "Kentucky" },
+  { pick: 31, team: "Philadelphia Eagles", name: "Jihaad Campbell", pos: "LB", school: "Alabama" },
+  { pick: 32, team: "Kansas City Chiefs", name: "Josh Simmons", pos: "OT", school: "Ohio State" },
+];
+
 // --- BIG BOARD / CURATED PROSPECTS ---
 // SEND ME YOUR NEW LIST TO UPDATE THIS!
 // --- BIG BOARD / CURATED PROSPECTS ---
