@@ -6,8 +6,7 @@ from dateutil import parser
 
 # --- CONFIGURATION ---
 warnings.filterwarnings("ignore", category=UserWarning, module='urllib3')
-API_KEY = "RB6XKAKaHDQniZB8mLcR4jP30+NeVZw/YCEZcBKeSpKIYuZmBNhswNNkBHLvNxf1"
-HEADERS = { "Authorization": f"Bearer {API_KEY}" }
+from config import API_KEY, HEADERS
 YEAR = 2025
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))

@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import './PlayersDashboard.css';
 import { PLAYER_DATABASE } from '../data'; // <--- Using the Big Database
 
+const PLAYERS_PER_PAGE = 50;
+
 const PlayersDashboard = ({ onPlayerClick }) => {
   const [activeTab, setActiveTab] = useState('ALL');
   const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
 
   // SAFETY: If data is missing, default to empty array
   const safePlayers = PLAYER_DATABASE || [];
@@ -24,6 +27,24 @@ const PlayersDashboard = ({ onPlayerClick }) => {
     return matchesTab && (nameMatch || schoolMatch);
   });
 
+  // Changing a filter jumps back to the first page so users never land on a
+  // now-empty page.
+  const handleSearchChange = (value) => {
+    setSearchTerm(value);
+    setCurrentPage(1);
+  };
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    setCurrentPage(1);
+  };
+
+  // Pagination: cap the list at PLAYERS_PER_PAGE rows per page.
+  const totalPages = Math.max(1, Math.ceil(filteredPlayers.length / PLAYERS_PER_PAGE));
+  const safePage = Math.min(currentPage, totalPages);
+  const pageStart = (safePage - 1) * PLAYERS_PER_PAGE;
+  const pagePlayers = filteredPlayers.slice(pageStart, pageStart + PLAYERS_PER_PAGE);
+
   return (
     <div className="players-dashboard">
       
@@ -36,7 +57,7 @@ const PlayersDashboard = ({ onPlayerClick }) => {
             placeholder="Search Player or School..." 
             className="player-search"
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => handleSearchChange(e.target.value)}
           />
         </div>
       </div>
@@ -47,7 +68,7 @@ const PlayersDashboard = ({ onPlayerClick }) => {
           <button 
             key={type}
             className={`filter-pill ${activeTab === type ? 'active' : ''}`}
-            onClick={() => setActiveTab(type)}
+            onClick={() => handleTabChange(type)}
           >
             {type}
           </button>
@@ -70,7 +91,7 @@ const PlayersDashboard = ({ onPlayerClick }) => {
               </tr>
             </thead>
             <tbody>
-              {filteredPlayers.map((player, index) => {
+              {pagePlayers.map((player, index) => {
                 // Fallback to '-' if missing
                 const s1 = player.stats?.s1 || '-';
                 const s2 = player.stats?.s2 || '-';
@@ -78,7 +99,7 @@ const PlayersDashboard = ({ onPlayerClick }) => {
 
                 return (
                   <tr key={player.id} onClick={() => onPlayerClick(player.id)}>
-                    <td className="td-rank">{index + 1}</td>
+                    <td className="td-rank">{pageStart + index + 1}</td>
                     <td className="td-player">
                       <div className="player-cell">
                         <div className="player-avatar-small">
@@ -115,6 +136,32 @@ const PlayersDashboard = ({ onPlayerClick }) => {
           </div>
         )}
       </div>
+
+      {/* Pagination */}
+      {filteredPlayers.length > 0 && (
+        <div className="pagination-row">
+          <span className="page-summary">
+            Showing {pageStart + 1}&ndash;{pageStart + pagePlayers.length} of {filteredPlayers.length}
+          </span>
+          <div className="page-controls">
+            <button
+              className="page-btn"
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              disabled={safePage <= 1}
+            >
+              &larr; Prev
+            </button>
+            <span className="page-info">Page {safePage} of {totalPages}</span>
+            <button
+              className="page-btn"
+              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+              disabled={safePage >= totalPages}
+            >
+              Next &rarr;
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

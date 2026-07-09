@@ -1,6 +1,6 @@
 import React from 'react';
 import './HomeDashboard.css';
-import { CFP_MATCHUPS, BOWL_GAMES, FIRST_ROUND_ORDER, PROSPECTS_2026 } from '../data';
+import { CFP_MATCHUPS, BOWL_GAMES, FANTASY_ROOKIE_PPR_TOP25, DRAFT_2026_ROUND_1 } from '../data';
 
 const HomeDashboard = ({ setView }) => {
   return (
@@ -20,7 +20,7 @@ const HomeDashboard = ({ setView }) => {
       {/* 2. MAIN GRID */}
       <div className="home-grid">
         
-        {/* COL 1: GAMES (Auto Height) */}
+        {/* COL 1: GAMES (Auto Height) — left alone per product request */}
         <div className="home-column">
           <div className="dashboard-card auto-height"> 
             <div className="section-title">🏆 CFP Bracket</div>
@@ -46,45 +46,38 @@ const HomeDashboard = ({ setView }) => {
           </div>
         </div>
 
-        {/* COL 2: DRAFT ORDER (Fixed Height) */}
+        {/* COL 2: FANTASY ROOKIE RANKINGS */}
         <div className="home-column">
           <div className="dashboard-card fixed-height">
-            <div className="section-title">⚖️ NFL Draft Order</div>
+            <div className="section-title">🏆 Top 25 PPR Rookies</div>
             <div className="scroll-area">
-              {FIRST_ROUND_ORDER.map((item) => (
-                <div key={item.pick} className="order-row">
+              {FANTASY_ROOKIE_PPR_TOP25.map((item) => (
+                <div key={item.rank} className="order-row">
                   <div className="pick-info">
-                    <span className="pick-num">#{item.pick}</span>
-                    <span className="team-name">{item.team}</span>
+                    <span className="pick-num">{item.rank}</span>
+                    <span className="team-name">{item.name}</span>
                   </div>
-                  <span className="team-needs">{item.needs}</span>
+                  <span className="team-needs">{item.pos} &middot; {item.team}</span>
                 </div>
               ))}
             </div>
           </div>
         </div>
 
-        {/* COL 3: BIG BOARD (Fixed Height) */}
+        {/* COL 3: 2026 FIRST ROUND */}
         <div className="home-column">
           <div className="dashboard-card fixed-height">
-            <div className="section-title">🔥 Offensive Big Board</div>
+            <div className="section-title">🏈 2026 Draft &bull; Round 1</div>
             <div className="scroll-area">
-              {PROSPECTS_2026.map((p, index) => (
-                <div key={p.id} className="draft-item">
+              {DRAFT_2026_ROUND_1.map((p) => (
+                <div key={p.pick} className="draft-item">
                   <div className="player-main">
-                    <div className="rank-badge">{index + 1}</div>
+                    <div className="rank-badge">{p.pick}</div>
                     <div className="player-name">{p.name}</div>
-                  </div>
-                  
-                  {/* Stock Trend Badges */}
-                  <div className={`trend-badge trend-${p.trend || 'flat'}`}>
-                    {p.trend === 'up' && 'Rise'}
-                    {p.trend === 'down' && 'Fall'}
-                    {p.trend === 'flat' && 'Stable'}
                   </div>
 
                   <div className="player-meta">
-                    <span className="school">{p.school}</span>
+                    <span className="school">{p.team}</span>
                     <span className="pos-tag">{p.pos}</span>
                   </div>
                 </div>

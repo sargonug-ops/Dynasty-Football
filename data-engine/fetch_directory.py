@@ -6,8 +6,7 @@ import warnings
 
 # --- CONFIGURATION ---
 warnings.filterwarnings("ignore", category=UserWarning, module='urllib3')
-API_KEY = "RB6XKAKaHDQniZB8mLcR4jP30+NeVZw/YCEZcBKeSpKIYuZmBNhswNNkBHLvNxf1"
-HEADERS = { "Authorization": f"Bearer {API_KEY}" }
+from config import API_KEY, HEADERS
 YEAR = 2025
 MIN_YARDS = 200 
 

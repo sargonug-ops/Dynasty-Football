@@ -5,12 +5,9 @@ from dateutil import parser
 
 # 1. SETUP
 warnings.filterwarnings("ignore", category=UserWarning, module='urllib3')
-API_KEY = "RB6XKAKaHDQniZB8mLcR4jP30+NeVZw/YCEZcBKeSpKIYuZmBNhswNNkBHLvNxf1"
-HEADERS = { "Authorization": f"Bearer {API_KEY}" }
-YEAR = 2024
-
-# --- CACHE FOR DEFENSIVE STATS ---
-OPPONENT_INTEL = {}
+from config import API_KEY, HEADERS
+from defense_intel import prefetch_defensive_intel, get_havoc_rating, calculate_relative_rating
+YEAR = 2025
 
 def search_team():
     q = input("\nEnter Team Name (e.g. Arizona State): ").strip()
@@ -28,91 +25,6 @@ def search_team():
         choice = input(f"Select # (1-{len(matches[:5])}): ")
         return matches[int(choice)-1]['school']
     except: return None
-
-def prefetch_defensive_intel():
-    """
-    Fetches stats for ALL teams in 2024.
-    Tracks: TFL, Sacks, INT, PD, and Fumbles Recovered.
-    """
-    print(f"🛡️  Scouting all FBS defenses for {YEAR}...", end="\r")
-    
-    # 1. Get Game Counts
-    games_played = {}
-    try:
-        rec_url = "https://api.collegefootballdata.com/records"
-        rec_resp = requests.get(rec_url, headers=HEADERS, params={"year": YEAR})
-        for team in rec_resp.json():
-            g_count = team['total']['games']
-            games_played[team['team']] = max(1, g_count)
-    except: pass
-
-    # 2. Get Raw Stats
-    stats_url = "https://api.collegefootballdata.com/stats/season"
-    try:
-        resp = requests.get(stats_url, headers=HEADERS, params={"year": YEAR})
-        data = resp.json()
-        
-        for row in data:
-            team = row['team']
-            stat = row['statName']
-            val = row['statValue']
-            
-            if team not in OPPONENT_INTEL:
-                OPPONENT_INTEL[team] = {
-                    'tfl': 0, 
-                    'sacks': 0, 
-                    'int': 0, 
-                    'pd': 0, 
-                    'fumbles': 0, 
-                    'games': games_played.get(team, 1)
-                }
-            
-            if stat == 'tacklesForLoss': OPPONENT_INTEL[team]['tfl'] = val
-            elif stat == 'sacks': OPPONENT_INTEL[team]['sacks'] = val
-            elif stat == 'interceptions': OPPONENT_INTEL[team]['int'] = val
-            elif stat == 'passesDeflected': OPPONENT_INTEL[team]['pd'] = val
-            elif stat == 'fumblesRecovered': OPPONENT_INTEL[team]['fumbles'] = val
-
-    except: 
-        print("\n⚠️ Failed to fetch defensive stats.")
-        return
-
-    print("✅ Defensive Intel Loaded.                 ")
-
-def get_havoc_rating(opponent):
-    """
-    Returns: Weighted Havoc, Sacks PG, Turnovers PG
-    Formula: (TFL + 2*Int + 2*Fum + 1.5*Sacks + PD) / Games
-    """
-    if opponent not in OPPONENT_INTEL:
-        return 0, 0, 0
-    
-    s = OPPONENT_INTEL[opponent]
-    g = s['games']
-    
-    # Raw Totals
-    tfl = s['tfl']
-    ints = s['int']
-    fums = s['fumbles']
-    sacks = s['sacks']
-    pd = s['pd']
-    
-    # 1. Calculate Weighted Havoc Score
-    # Formula: TFL + 2(Int) + 2(Fumbles) + 1.5(Sacks) + PD
-    weighted_sum = tfl + (2 * ints) + (2 * fums) + (1.5 * sacks) + pd
-    havoc_score = weighted_sum / g
-    
-    # 2. Calculate Specific Averages
-    sacks_pg = sacks / g
-    turnovers_pg = (ints + fums) / g
-    
-    return havoc_score, sacks_pg, turnovers_pg
-
-def calculate_relative_rating(spread, avg_spread):
-    deviation = spread - avg_spread
-    raw_rating = 5.5 + (deviation / 6.0)
-    rating = int(round(max(1, min(10, raw_rating))))
-    return rating
 
 def get_matchup_data(team_name):
     print(f"📡 Analyzing schedule for {team_name}...", end="\r")

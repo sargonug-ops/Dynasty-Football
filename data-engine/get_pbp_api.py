@@ -1,12 +1,10 @@
 import requests
 import pandas as pd
+from config import API_KEY
 
 def get_pbp_direct():
-    # 1. YOUR KEY
-    api_key = "RB6XKAKaHDQniZB8mLcR4jP30+NeVZw/YCEZcBKeSpKIYuZmBNhswNNkBHLvNxf1"
-    
     headers = {
-        "Authorization": f"Bearer {api_key}",
+        "Authorization": f"Bearer {API_KEY}",
         "Accept": "application/json"
     }
 
