@@ -41,11 +41,13 @@ async function apiGet(path) {
 
 /**
  * Fetches every team's defensive intel (havoc score, sacks/game,
- * turnovers/game, last updated timestamp), populated by
- * data-engine/matchup_data3.py into Postgres.
+ * turnovers/game, last updated timestamp).
+ * Production: Vercel `/api/defenses` (live CFBD).
+ * Local: Vite proxy → FastAPI `/defenses` (Postgres via matchup_data3.py).
  */
-export function fetchDefenses() {
-  return apiGet('/defenses');
+export function fetchDefenses(year) {
+  const qs = year != null ? `?year=${encodeURIComponent(year)}` : '';
+  return apiGet(`/defenses${qs}`);
 }
 
 /**

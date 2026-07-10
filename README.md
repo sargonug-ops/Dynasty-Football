@@ -121,6 +121,11 @@ dev, and as a **Vercel project env var** named `CFBD_API_KEY` for production
 - Build command / output are defined in `frontend/vercel.json`
   (`npm install && npm run build` → `dist`).
 - Advanced stats function: `frontend/api/players/advanced.py`
+- Defensive rankings function: `frontend/api/defenses.py` (live CFBD, no Postgres)
+
+If a Vercel deploy still runs `npm install --prefix frontend`, clear any
+**Override** Build/Install/Output settings in the Vercel project so it uses
+`frontend/vercel.json` instead.
 
 ### Running tests
 
