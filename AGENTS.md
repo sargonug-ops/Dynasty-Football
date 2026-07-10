@@ -26,7 +26,10 @@ DB setup below are captured in the VM snapshot, not the update script.
   then `uvicorn main:app --reload --port 8000`. It reads `data-engine/.env`
   (copied from `.env.example`).
 - **Frontend:** from `frontend/`, `npm run dev`. Reads `frontend/.env`
-  (`VITE_API_BASE_URL`, defaults to `http://localhost:8000`).
+  (defaults to same-origin `/api`; Vite proxies that to `:8000` in local
+  dev, Vercel serves `frontend/api/` serverless functions in production —
+  the Vercel Root Directory is `frontend`).
+  Production advanced stats need `CFBD_API_KEY` set in the Vercel project.
 
 ### Data / API keys
 

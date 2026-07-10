@@ -1,7 +1,20 @@
-// Thin client for the FastAPI backend (data-engine/main.py).
-// Base URL is configurable via VITE_API_BASE_URL so the same build can
-// point at a local dev API or a deployed one.
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+// Thin client for the Dynasty Football API.
+//
+// Resolution order:
+//   1. VITE_API_BASE_URL (explicit override)
+//   2. Same-origin `/api` — Vercel serverless in production, Vite proxy in local dev
+//
+// Do NOT default to http://localhost:8000 in production builds: that breaks
+// the deployed site (browser tries to call the user's machine).
+function resolveApiBaseUrl() {
+  const fromEnv = import.meta.env.VITE_API_BASE_URL;
+  if (fromEnv && String(fromEnv).trim()) {
+    return String(fromEnv).replace(/\/$/, '');
+  }
+  return '/api';
+}
+
+const API_BASE_URL = resolveApiBaseUrl();
 
 class ApiError extends Error {
   constructor(message, status) {
