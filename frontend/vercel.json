@@ -4,6 +4,10 @@
   "framework": null,
   "installCommand": "npm install",
   "functions": {
+    "api/health.py": {
+      "includeFiles": "api/_lib/**",
+      "maxDuration": 10
+    },
     "api/defenses.py": {
       "includeFiles": "api/_lib/**",
       "maxDuration": 60

@@ -29,13 +29,15 @@ def _json_response(handler: BaseHTTPRequestHandler, status: int, payload) -> Non
 def _handle(query: dict) -> tuple[int, object]:
     import os
 
-    api_key = (os.environ.get("CFBD_API_KEY") or "").strip()
-    if not api_key:
-        return 503, {"detail": "CFBD_API_KEY is not configured on the server"}
-
     import config
 
-    config.API_KEY = api_key
+    try:
+        config.require_api_key()
+    except RuntimeError as e:
+        return 503, {
+            "detail": str(e),
+            "health_check": "/api/health",
+        }
 
     year_raw = (query.get("year") or [None])[0]
     try:
