@@ -115,6 +115,16 @@ https://collegefootballdata.com/key and put it in `data-engine/.env` for local
 dev, and as a **Vercel project env var** named `CFBD_API_KEY` for production
 (Player Profile → Advanced uses `/api/players/advanced`).
 
+**If defensive rankings still show a 503 after adding the key:**
+
+1. Open the Vercel project that serves **cfbanalyzer.xyz** (not a different fork/project).
+2. **Settings → Environment Variables** → confirm a variable named exactly `CFBD_API_KEY`
+   (not `CFB_API_KEY` — missing the **D** — and not `VITE_CFBD_API_KEY`, which is browser-only).
+3. Ensure **Production** is checked for that variable.
+4. **Deployments → … → Redeploy** the latest Production deployment (saving the env var alone is not always enough).
+5. Visit `https://cfbanalyzer.xyz/api/health` — `cfbd.configured` should be `true` and
+   `git.owner` / `git.repo` should match the repo linked to that Vercel project.
+
 ### Vercel notes
 
 - Project **Root Directory** must stay `frontend` (matches existing project settings).
@@ -122,6 +132,7 @@ dev, and as a **Vercel project env var** named `CFBD_API_KEY` for production
   (`npm install && npm run build` → `dist`).
 - Advanced stats function: `frontend/api/players/advanced.py`
 - Defensive rankings function: `frontend/api/defenses.py` (live CFBD, no Postgres)
+- Health/diagnostics: `frontend/api/health.py` (`GET /api/health`)
 
 If a Vercel deploy still runs `npm install --prefix frontend`, clear any
 **Override** Build/Install/Output settings in the Vercel project so it uses
