@@ -6,6 +6,7 @@ PRIMARY_ENV_NAME = "CFBD_API_KEY"
 
 # Common alternate names users sometimes set in Vercel by mistake.
 _FALLBACK_ENV_NAMES = (
+    "CFB_API_KEY",  # frequent typo: missing the "D" in CFBD
     "COLLEGE_FOOTBALL_DATA_API_KEY",
     "CFBD_KEY",
     "COLLEGE_FOOTBALL_DATA_KEY",

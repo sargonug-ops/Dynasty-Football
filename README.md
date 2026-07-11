@@ -119,7 +119,7 @@ dev, and as a **Vercel project env var** named `CFBD_API_KEY` for production
 
 1. Open the Vercel project that serves **cfbanalyzer.xyz** (not a different fork/project).
 2. **Settings → Environment Variables** → confirm a variable named exactly `CFBD_API_KEY`
-   (not `VITE_CFBD_API_KEY` — that prefix is for browser build vars only).
+   (not `CFB_API_KEY` — missing the **D** — and not `VITE_CFBD_API_KEY`, which is browser-only).
 3. Ensure **Production** is checked for that variable.
 4. **Deployments → … → Redeploy** the latest Production deployment (saving the env var alone is not always enough).
 5. Visit `https://cfbanalyzer.xyz/api/health` — `cfbd.configured` should be `true` and
